@@ -12,14 +12,14 @@ module.exports = {
     https: false,
     open: true,
     proxy: {
-			'/api': {
-				target: "https://www.wanandroid.com",//访问接口地址
-				changeOrigin: true,
-				pathRewrite: {//重写地址(接口地址是'http://192.168.1.1/api/getUserInfo')请求地址只需要写'/api/getUserInfo'
-					'/api': '/'  
-				}
-			}
-		}
+    	'/api': {
+    		target: "https://www.wanandroid.com",//访问接口地址,baseUrl中填写/api
+    		changeOrigin: true,
+    		pathRewrite: {//重写地址(接口地址是'http://192.168.1.1/api/getUserInfo')请求地址只需要写'/api/getUserInfo'
+    			'/api': '/'  
+    		}
+    	}
+    }
   },
   configureWebpack: {
     resolve: {

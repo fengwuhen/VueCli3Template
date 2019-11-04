@@ -36,23 +36,24 @@ function endLoading() {
  */
 const service = axios.create({
   timeout: 60000,
-  // headers: {
-  //   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  //   "X-Requested-With": "XMLHttpRequest"
-  // },
-  // baseURL: server.host,
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    "X-Requested-With": "XMLHttpRequest"
+  },
+  baseURL: server.host,
 });
 const serviceForm = axios.create({
   timeout: 60000,
-  // headers: {
-  //   'Content-Type': 'multipart/form-data; charset=UTF-8',
-  //   "X-Requested-With": "XMLHttpRequest",
-  // },
-  // baseURL: server.host,
+  headers: {
+    'Content-Type': 'multipart/form-data; charset=UTF-8',
+    "X-Requested-With": "XMLHttpRequest",
+  },
+  baseURL: server.host,
 });
 
 //http request 拦截器
 let request = function (config) {
+  startLoading();
   const token = getToken();
   if (token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
     config.headers.token = token;
@@ -66,11 +67,12 @@ let request_err = function (err) {
 
 // http response 拦截器
 let response = function (res) {
-  const data = res.data;
-  const message = `${data.code}--${data.msg}` || '未知错误'
+  endLoading();
+  const json = res.data;
+  const message = `${json.errorCode}--${json.errorMsg}` || '未知错误'
   if (res.status == 200) {
-    if (data.code == 200) {
-      return data;
+    if (json.errorCode == 0) {
+      return json;
     } else {
       Message({
         message: message,
@@ -81,9 +83,10 @@ let response = function (res) {
 };
 
 let response_err = function (err) {
+  endLoading();
   if (err.response) {
-    const data = err.response.data;
-    const message = `${data.code}--${data.msg}` || '未知错误'
+    const json = err.response.data;
+    const message = `${err.response.status}--${err.response.statusText}` || '未知错误'
     Message({
       message: message,
       type: 'error',
