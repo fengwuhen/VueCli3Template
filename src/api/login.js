@@ -2,7 +2,7 @@ import Axios from "axios"
 
 const login = {
 	get() {
-		return service.get('/api/wxarticle/chapters/json');
+		return Axios.get('/api/wxarticle/chapters/json');
 	},
 }
 
